@@ -47,7 +47,6 @@ function Header() {
                     <MenuIcon className="h-6"/>
                     <UserCircleIcon className="h-6"/>
                 </div>
-
             </div>
         </header>
     );

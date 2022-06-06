@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import airbnbLogo from '../public/Airbnb_Logo_Bélo.svg.png'
 import Header from "../components/Header";
-// This renders thing on screen
+import Banner from "../components/Banner";
+// This js document renders components on screen
 
 // Next JS has a built-in router, which index.js is a starting point. index.js points to the /index.js
 
@@ -20,6 +20,7 @@ export default function Home() {
             {/*Header*/}
             <Header />
             {/*Banner*/}
+            <Banner />
         </div>
     )
 }
