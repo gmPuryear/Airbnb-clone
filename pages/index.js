@@ -3,11 +3,13 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Header from "../components/Header";
 import Banner from "../components/Banner";
+import SmallCard from "../components/SmallCard";
 // This js document renders components on screen
 
 // Next JS has a built-in router, which index.js is a starting point. index.js points to the /index.js
 
-export default function Home() {
+// destructering: pulls apart the props data using exploreData
+export default function Home({exploreData}) {
     return (
         // this is tailwind CSS that has utility classes.
         <div className="">
@@ -18,9 +20,55 @@ export default function Home() {
             </Head>
 
             {/*Header*/}
-            <Header />
+            <Header/>
+
             {/*Banner*/}
-            <Banner />
+            <Banner/>
+
+            {/*Main Portion of screen*/}
+            <main className="max-w-7xl mx-auto px-8 sm:px-16">
+                <section className="pt-6">
+                    <h2 className="text-4xl font-semibold pb-5">Explore Nearby</h2>
+
+                    {/*Pull some data from a server to use server side rendering, but here we are going to use
+                    static rendering, because these cards will probably not change. Server-side is used for
+                    info that will change, like weather data*/}
+
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {/*map returns a value. Putting curly braces after the arrow means you are returning
+                    some JSX. The ? protects if it doesnt work.*/}
+                        {/*You need to attach keys to identify each element, without them you have to keeps re-rendering them*/}
+                        {/*everytime*/}
+                        {exploreData?.map(item => (
+                            //Curly braces let you have javascript inside HTML
+                            <SmallCard
+                                key={item.img}
+                                img={item.img}
+                                distance={item.distance}
+                                location={item.location}/>
+                        ))}
+                    </div>
+
+                </section>
+            </main>
         </div>
     )
 }
+
+// Next JS introduces a server which the user gets the page from the server. All we need to do is build the homescreen
+// then send it server pre-builds the pages before for STATIC rendering. builds pages BEFOREHAND
+// For SERVER SIDE rendering, everyime user comes to website it builds the server builds the page which is
+// faster than normal react. They just get the ONLY page that they want at a time.
+export async function getStaticProps() {
+    // Async function that is pulling in the array of objects and ALL we need is the JSON
+    const exploreData = await fetch('https://links.papareact.com/pyp')
+        .then(res => res.json()
+        )
+    return {
+        props: {
+            exploreData
+        }
+    }
+}
+
